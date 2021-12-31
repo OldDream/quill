@@ -187,7 +187,15 @@ class Selection {
       let blot = Parchment.find(node, true);
       let index = blot.offset(this.scroll);
       if (offset === 0) {
-        return index;
+        if (blot instanceof Parchment.Embed) {
+          if (range.start.node === range.end.node && range.start.node.previousSibling && !range.start.node.previousSibling.isContentEditable) {
+            return index + blot.length();
+          } else {
+            return index;
+          }
+        } else {
+          return index
+        }
       } else if (blot instanceof Parchment.Container) {
         return index + blot.length();
       } else {
