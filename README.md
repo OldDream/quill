@@ -107,3 +107,11 @@ Get help or stay up to date.
 ## License
 
 BSD 3-clause
+
+## node 10
+
+npm install
+bundle install
+npm run build
+
+

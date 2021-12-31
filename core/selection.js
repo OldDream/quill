@@ -182,6 +182,7 @@ class Selection {
     if (!range.native.collapsed) {
       positions.push([range.end.node, range.end.offset]);
     }
+    let resetRange = false
     let indexes = positions.map((position) => {
       let [node, offset] = position;
       let blot = Parchment.find(node, true);
@@ -189,6 +190,7 @@ class Selection {
       if (offset === 0) {
         if (blot instanceof Parchment.Embed) {
           if (range.start.node === range.end.node && range.start.node.previousSibling && !range.start.node.previousSibling.isContentEditable) {
+            resetRange = true
             return index + blot.length();
           } else {
             return index;
@@ -204,7 +206,11 @@ class Selection {
     });
     let end = Math.min(Math.max(...indexes), this.scroll.length() - 1);
     let start = Math.min(end, ...indexes);
-    return new Range(start, end-start);
+    const newRange = new Range(start, end-start);
+    if (resetRange) {
+      this.setRange(newRange)
+    }
+    return newRange
   }
 
   normalizeNative(nativeRange) {
