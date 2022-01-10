@@ -191,6 +191,12 @@ class Selection {
         if (blot instanceof Parchment.Embed) {
           if (range.start.node === range.end.node && range.start.node.previousSibling && !range.start.node.previousSibling.isContentEditable) {
             resetRange = true
+            if (blot.next instanceof Parchment.Text && /\s/.test(blot.next.text[0])) {
+              return index + blot.length() + 1;
+            } else if (blot.next instanceof Parchment.Text) {
+              blot.next.insertAt(0, ' ')
+              return index + blot.length() + 1;
+            }
             return index + blot.length();
           } else {
             return index;
